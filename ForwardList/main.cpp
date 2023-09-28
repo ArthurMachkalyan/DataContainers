@@ -34,6 +34,15 @@ public:
 		cout << "LConstructor:\t" << this << endl;
 	}
 
+	ForwardList(initializer_list<int> il) : ForwardList() {
+
+		//initializer_list - это контейнер
+		//контейнер - это объект, который организует хранение других объектов в памяти
+		//Как и у любого другого контейнера, у initializer_list есть методы begin() и еnd()
+		//begin() - возвращает итератор на начало контейнера
+		//end() - возвращает итератор на конец контейнера
+	}
+
 	~ForwardList() {
 		cout << "LDestructor:\t" << this << endl;
 	}
@@ -139,10 +148,20 @@ public:
 
 //#define BASE_CHECK
 //#define INSERT_CHECK
+//#define RANGE_BASED_FOR_ARRAY
+#define RANGE_BASED_FOR_ARRAY
+
 
 void main() {
 	setlocale(LC_ALL, "");
 
+#ifdef RANGE_BASED_FOR_ARRAY
+	ForwardList list = { 3,5,8,13,21 };
+	list.print();
+
+#endif // RANGE_BASED_FOR_ARRAY
+
+#ifdef RANGE_BASED_FOR_ARRAY
 	int arr[] = { 3,5,8,13,21 };
 	for (int i = 0; i < sizeof(arr)/sizeof(arr[0]); i++)
 	{
@@ -153,6 +172,8 @@ void main() {
 		cout << i << tab;
 	}
 	cout << endl;
+
+#endif // RANGE_BASED_FOR_ARRAY
 
 #ifdef BASE_CHECK
 	int n;
