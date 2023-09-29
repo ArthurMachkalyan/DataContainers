@@ -1,5 +1,8 @@
 ﻿#include <iostream>
 using namespace	std;
+using std::cout;
+using std::cin;
+using std::endl;
 
 #define delimeter "\n--------------------------------------\n"
 #define tab "\t"
@@ -41,6 +44,11 @@ public:
 		//Как и у любого другого контейнера, у initializer_list есть методы begin() и еnd()
 		//begin() - возвращает итератор на начало контейнера
 		//end() - возвращает итератор на конец контейнера
+	}
+
+	ForwardList(const ForwardList& other) {
+		this->Head = other.Head;
+		cout << "CopyConstructor" << tab << this << endl;
 	}
 
 	~ForwardList() {
@@ -96,6 +104,7 @@ public:
 		Temp->pNext = new Element(Data, Temp->pNext);
 	}
 
+
 	//                                        Removing elements:
 
 	void pop_front() {
@@ -105,18 +114,6 @@ public:
 	}
 
 	void pop_back() {
-		/*Element* LastElement = Head;
-		while (LastElement->pNext)
-		{
-			LastElement = LastElement->pNext;
-		}
-		Element* Temp = Head;
-		while (Temp->pNext != LastElement)
-		{
-			Temp = Temp->pNext;
-		}
-		delete LastElement;
-		Temp->pNext = NULL;*/
 		Element* Temp = Head;
 		while (Temp->pNext->pNext)
 		{
@@ -127,6 +124,20 @@ public:
 
 	}
 	
+	void erase(int Index) {
+		if (Index == 0)return pop_front();
+		Element* Temp = Head;
+		for (int i = 0; i < Index - 1; i++)
+		{
+			if (Temp->pNext == nullptr)return pop_back();
+			Temp = Temp->pNext;
+		}
+		Element* Erased = Temp->pNext;
+		Temp->pNext = Temp->pNext->pNext;
+		delete Erased;
+		
+
+	}
 
 
 	//                       Methods:
@@ -148,8 +159,9 @@ public:
 
 //#define BASE_CHECK
 //#define INSERT_CHECK
+//#define ERASE_CHECK
 //#define RANGE_BASED_FOR_ARRAY
-#define RANGE_BASED_FOR_ARRAY
+//#define RANGE_BASED_FOR_ARRAY
 
 
 void main() {
@@ -192,16 +204,38 @@ void main() {
 	cout << delimeter << endl;
 	list.pop_back();
 	list.print();*/
-	list.clear();
+	//list.clear();
 
 #endif // BASE_CHECK
 
 #ifdef INSERT_CHECK
 	int index, value;
-	cout << "Enter index add element: "; cin >> index;
-	cout << "Enter adding element: "; cin >> value;
+	cout << "Enter index element: "; cin >> index;
+	cout << "Enter add element: "; cin >> value;
 	list.insert(value, index);
 	list.print();
+	
 #endif // INSERT_CHECK
+
+#ifdef ERASE_CHECK
+	int index;
+	cout << "Enter index for delete element: "; cin >> index;
+	list.erase(index);
+	list.print();
+	list.clear();
+#endif // ERASE_CHECK
+
+	
+	int n;
+	cout << "Enter list size: "; cin >> n;
+	ForwardList lst;
+	for (int i = 0; i < n; i++)
+	{
+		lst.push_back(rand() % 100);
+	}
+	lst.print();
+	cout << delimeter << endl;
+	ForwardList gsl(lst);
+	gsl.print();
 
 }
