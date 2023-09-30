@@ -51,6 +51,12 @@ public:
 		cout << "CopyConstructor" << tab << this << endl;
 	}
 
+	ForwardList(ForwardList&& other) {
+		this->Head = other.Head;
+		other.Head = nullptr;
+		cout << "MoveConstructor:" << this << endl;
+	}
+
 	~ForwardList() {
 		cout << "LDestructor:\t" << this << endl;
 	}
