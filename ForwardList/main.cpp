@@ -17,12 +17,9 @@ public:
 
 	Element(int Data, Element* pNext = nullptr) :Data(Data), pNext(pNext) {
 		count++;
-
 #ifdef DEBUG
          cout << "EConstructor:\t" << this << endl;
 #endif // DEBUG
-
-		
 	}
 
 	~Element() {
@@ -41,15 +38,11 @@ int Element::count = 0; //определение статической пере
 class Iterator {
 	Element* Temp;
 public:
-
-
 	Iterator(Element* Temp = nullptr) : Temp(Temp) {
 #ifdef DEBUG
 		cout << "ItConstructor:\t" << this << endl;
 #endif // DEBUG
-
 	}
-
 	~Iterator() {
 #ifdef DEBUG
 		cout << "ItDestructor:\t" << this << endl;
@@ -68,6 +61,9 @@ public:
 		return old;
 	}
 
+
+
+
 	bool operator==(const Iterator& other)const {
 		return this->Temp == other.Temp;
 	}
@@ -79,7 +75,6 @@ public:
 	int operator*() {
 		return Temp->Data;
 	}
-
 	
 };
 
@@ -89,11 +84,11 @@ class ForwardList {
 	unsigned int size;
 public:
 	
-	Iterator begin() {
+	const Iterator begin()const {
 		return Head;
 	}
 
-	Iterator end() {
+	const Iterator end()const {
 		return nullptr;
 	}
 
@@ -105,7 +100,6 @@ public:
 	}
 
 	ForwardList(const initializer_list<int> il) : ForwardList() {
-
 		//initializer_list - это контейнер
 		//контейнер - это объект, который организует хранение других объектов в памяти
 		//Как и у любого другого контейнера, у initializer_list есть методы begin() и еnd()
@@ -118,24 +112,66 @@ public:
 		}
 	}
 
+	ForwardList(ForwardList&& other):ForwardList() {
+		/*this->Head = other.Head;
+		this->size = other.size;
+
+		other.Head = nullptr;
+		other.size = 0;*/
+		*this = std::move(other);
+		cout << "MoveConstructor\t:" << this << "<-" << &other << endl;
+	}
+
 	ForwardList(const ForwardList& other) : ForwardList() {
 		/*this->Head = other.Head;*/
-		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
+		/*for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
 		{
 			push_back(Temp->Data);
-		}
-		cout << "LCopyConstructor\t" << this << endl;
+		}*/
+		*this = other;
+		cout << "LCopyConstructor\t" << this << "<-" << &other << endl;
 	}
 
-	ForwardList(ForwardList&& other) {
-		this->Head = other.Head;
-		other.Head = nullptr;
-		cout << "MoveConstructor\t:" << this << endl;
-	}
+
+	
 
 	~ForwardList() {
+		while (Head)pop_front();
 		cout << "LDestructor:\t" << this << endl;
 	}
+	
+	//                       Operators: 
+
+	ForwardList& operator=(const ForwardList& other) {
+		if (this == &other)
+		{
+			return *this;
+		}
+		while (Head)
+		{
+			pop_front();
+		}
+		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext) {
+			push_back(Temp->Data);
+			cout << "CopyAssignemnt:\t" << this << "<-" << &other << endl;
+			return *this;
+		}
+	}
+
+	ForwardList& operator=(ForwardList&& other) {
+		if (this == &other)return *this;
+		while (Head)pop_front();
+
+		this->Head = other.Head;
+		this->size = 0;
+		
+		other.Head = nullptr;
+		other.size = 0;
+		cout << "MoveAssignment\t" << this << "<-" << &other << endl;
+		return *this;
+
+	}
+
 
 	//                     Adding elements:
 
@@ -242,7 +278,14 @@ public:
 	}
 };
 
-#define BASE_CHECK
+ForwardList operator+(const ForwardList& left, const ForwardList& right) {
+	ForwardList result = left;
+	for (Iterator it = right.begin(); it != right.end(); ++it)
+		result.push_back(*it);
+	return result;
+}
+
+//#define BASE_CHECK
 //#define INSERT_CHECK
 //#define ERASE_CHECK
 //#define RANGE_BASED_FOR_ARRAY
@@ -317,11 +360,22 @@ void main() {
 #endif // ERASE_CHECK
 
 	ForwardList list1 = { 3,5,8,13,21 };
+	list1 = list1;
 	for (int i : list1)cout << i << tab; cout << endl;
 	
-	ForwardList list2 = list1;  //Copy Constructor
+	ForwardList list2 = { 34,55,89 };
+	//list1 = list1;
 	for (int i : list2)cout << i << tab; cout << endl;
+
+	//ForwardList list3 = list1 + list2;
+	ForwardList list3;
+	list3 = list1 + list2;
+	for (int i : list3)cout << i << tab; cout << endl;
+
+
 
 	list1.print();
 	list2.print();
+	list3.print();
+	//list3.print();
 }
