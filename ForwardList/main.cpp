@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <ctime>
 using namespace	std;
 using std::cout;
 using std::cin;
@@ -143,19 +144,16 @@ public:
 	//                       Operators: 
 
 	ForwardList& operator=(const ForwardList& other) {
-		if (this == &other)
+		if (this == &other)return *this;
+		while (Head)pop_front();
+		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext)
 		{
-			return *this;
+			push_front(Temp->Data);
 		}
-		while (Head)
-		{
-			pop_front();
-		}
-		for (Element* Temp = other.Head; Temp; Temp = Temp->pNext) {
-			push_back(Temp->Data);
-			cout << "CopyAssignemnt:\t" << this << "<-" << &other << endl;
-			return *this;
-		}
+		reverse();
+		cout << "CopyAssignemnt:\t" << this << "<-" << &other << endl;
+		return *this;
+	
 	}
 
 	ForwardList& operator=(ForwardList&& other) {
@@ -276,7 +274,19 @@ public:
 	void clear() {
 		while (Head)pop_front();
 	}
+
+    void reverse(ForwardList& list) {
+		ForwardList reverse;
+		while (Head)
+		{
+			reverse.push_front(Head->Data);
+			this->pop_front();
+		}
+		this->Head = reverse.Head;
+		reverse.Head = nullptr;
+    }
 };
+
 
 ForwardList operator+(const ForwardList& left, const ForwardList& right) {
 	ForwardList result = left;
@@ -290,8 +300,8 @@ ForwardList operator+(const ForwardList& left, const ForwardList& right) {
 //#define ERASE_CHECK
 //#define RANGE_BASED_FOR_ARRAY
 //#define RANGE_BASED_FOR_LIST
-#define COPY_METHODS_CHECK
-//#define FORWARD_LIST_PREFORMANCE_TEST
+//#define OPERATOR_PLUS_CHECK
+#define FORWARD_LIST_PREFORMANCE_TEST
 
 void main() {
 	setlocale(LC_ALL, "");
@@ -359,10 +369,11 @@ void main() {
 	list.clear();
 #endif // ERASE_CHECK
 
+#ifdef OPERATOR_PLUS_CHECK
 	ForwardList list1 = { 3,5,8,13,21 };
 	list1 = list1;
 	for (int i : list1)cout << i << tab; cout << endl;
-	
+
 	ForwardList list2 = { 34,55,89 };
 	//list1 = list1;
 	for (int i : list2)cout << i << tab; cout << endl;
@@ -377,5 +388,29 @@ void main() {
 	list1.print();
 	list2.print();
 	list3.print();
-	//list3.print();
+#endif // OPERATOR_PLUS_CHECK
+
+	int n;
+	cout << "Enter list size: "; cin >> n;
+	ForwardList list;
+	clock_t start = clock();
+	for (int i = 0; i < n; i++)
+	{
+		int value = rand() % 100;
+		cout << value << tab;
+		list.push_back(value);
+	}
+	cout << endl;
+	for (int i : list)cout << i << tab; cout << endl;
+	clock_t end = clock();
+	cout << "Data loaded for " << double(end-start)/CLOCKS_PER_SEC << endl;
+	cout << "Copying list...." << endl;
+	start = clock();
+	ForwardList list2 = list;
+	end = clock();
+	cout << "List copied for " << double(end - start) / CLOCKS_PER_SEC << endl;
+	list2.print();
+	
+
+	
 }
