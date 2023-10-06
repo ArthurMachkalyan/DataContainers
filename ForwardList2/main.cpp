@@ -92,6 +92,7 @@ public:
 
 
 	//						Removing elements:
+
 	void pop_front()
 	{
 		if (Head == nullptr && Tail == nullptr)return;
@@ -121,16 +122,7 @@ public:
 
 	void erase(int Index) {
 		if (Index == 0)return pop_front();
-		Element* Temp = Head;
-		for (int i = 0; i < Index - 1; i++)
-		{
-			if (Temp->pNext == nullptr)return pop_back();
-			Temp = Temp->pNext;
-		}
-		Element* Erased = Temp->pNext;
-		Temp->pNext = Temp->pNext->pNext;
-		delete Erased;
-		size--;
+		
 	}
 	
 
