@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 using namespace std;
 using std::cout;
 using std::cin;
@@ -26,9 +26,9 @@ class List
 		}
 		friend class List;
 	} *Head, * Tail;
-	size_t size;	//size_t - ýòî unsigned int
-	//Äèðåêòèâà typedef äàåò ñóùåñòâóþùåìó òèïó äàííûõ íîâîå èìÿ:
-	//typedef ñóùåñòâóþùèé_òèï_äàííûõ íîâîå_èìÿ_ýòîãî_òèïà;
+	size_t size;	//size_t - ÑÑ‚Ð¾ unsigned int
+	//Ð”Ð¸Ñ€ÐµÐºÑ‚Ð¸Ð²Ð° typedef Ð´Ð°ÐµÑ‚ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰ÐµÐ¼Ñƒ Ñ‚Ð¸Ð¿Ñƒ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð½Ð¾Ð²Ð¾Ðµ Ð¸Ð¼Ñ:
+	//typedef ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ð¹_Ñ‚Ð¸Ð¿_Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð½Ð¾Ð²Ð¾Ðµ_Ð¸Ð¼Ñ_ÑÑ‚Ð¾Ð³Ð¾_Ñ‚Ð¸Ð¿Ð°;
 public:
 	List()
 	{
@@ -133,13 +133,13 @@ public:
 	{
 		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
 			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
-		cout << "Êîëè÷åñòâî ýëåìåíòîâ ñïèñêà: " << size << endl;
+		cout << "ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð¾Ð² ÑÐ¿Ð¸ÑÐºÐ°: " << size << endl;
 	}
 	void reverse_print()const
 	{
 		for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
 			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
-		cout << "Êîëè÷åñòâî ýëåìåíòîâ ñïèñêà: " << size << endl;
+		cout << "ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð¾Ð² ÑÐ¿Ð¸ÑÐºÐ°: " << size << endl;
 	}
 };
 
@@ -153,7 +153,7 @@ void main()
 
 #ifdef BASE_CHECK
 	int n;
-	cout << "Ââåäèòå ðàçìåð ñïèñêà: "; cin >> n;
+	cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ñ€Ð°Ð·Ð¼ÐµÑ€ ÑÐ¿Ð¸ÑÐºÐ°: "; cin >> n;
 	List list;
 	for (int i = 0; i < n; i++)
 	{
