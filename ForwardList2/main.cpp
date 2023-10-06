@@ -7,54 +7,45 @@ using std::endl;
 #define delimeter "\n--------------------------------------\n"
 #define tab "\t"
 
-
-class Element {
-	int Data;
-	Element* pNext;
-	Element* pPrev;
-	static int count;
+class List
+{
+	class Element
+	{
+		int Data;
+		Element* pNext;
+		Element* pPrev;
+	public:
+		Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr)
+			:Data(Data), pNext(pNext), pPrev(pPrev)
+		{
+			cout << "EConstructor:\t" << this << endl;
+		}
+		~Element()
+		{
+			cout << "EDestructor:\t" << this << endl;
+		}
+		friend class List;
+	} *Head, * Tail;
+	size_t size;	//size_t - это unsigned int
+	//Директива typedef дает существующему типу данных новое имя:
+	//typedef существующий_тип_данных новое_имя_этого_типа;
 public:
-	Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr)
-		: Data(Data), pNext(pNext), pPrev(pPrev) {
-		count++;
-		cout << "EConstructor:\t" << this << endl;
-	}
-	~Element() {
-		count--;
-		cout << "EDestructor:\t" << this << endl;
-	}
-
-	friend class List;
-
-} *Head, * Tail;
-
-size_t size; // size_t - это unsigned int // Директива typedef дает существующему типу данных новое имя:
-//typedef существующий_тип_данных новое_имя_этого_типа;
-
-
-
-int Element::count = 0;
-
-class List {
-	Element* Head;
-	Element* Tail;
-	unsigned int size;
-public:
-
-	List() {
+	List()
+	{
 		Head = Tail = nullptr;
 		size = 0;
 		cout << "LConstructor:\t" << this << endl;
 	}
-	~List() {
+	~List()
+	{
 		while (Head)pop_front();
 		cout << "LDestructor:\t" << this << endl;
 	}
 
-	//                     Adding elements
-
-	void push_front(int Data) {
-		if (Head==nullptr && Tail == nullptr)
+	//					Addign elements:
+	void push_front(int Data)
+	{
+		if (Head == nullptr && Tail == nullptr)
 		{
 			Head = Tail = new Element(Data);
 		}
@@ -68,8 +59,8 @@ public:
 		}
 		size++;
 	}
-
-	void push_back(int Data) {
+	void push_back(int Data)
+	{
 		if (Head == nullptr && Tail == nullptr)
 		{
 			Head = Tail = new Element(Data);
@@ -81,13 +72,29 @@ public:
 			Tail->pNext = New;
 			Tail = New;*/
 			Tail = Tail->pNext = new Element(Data, nullptr, Tail);
-
 		}
+		size++;
 	}
-	//                         Removing elements:
+	
+	void insert(int Data, int Index) {
+		if (Index == 0)return push_front(Data);
+		Element* Temp = Head;
+		for (int i = 0; i < Index - 1; i++)
+		{
+			if (Temp->pNext == nullptr)return push_back(Data);
+			Temp = Temp->pNext;
+		}
 
-	void pop_front() {
-		if (Head == nullptr && Tail== nullptr)return;
+		Temp->pNext = new Element(Data, Temp->pNext);
+		size++;
+	}
+
+
+
+	//						Removing elements:
+	void pop_front()
+	{
+		if (Head == nullptr && Tail == nullptr)return;
 		if (Head == Tail)
 		{
 			delete Head;
@@ -99,36 +106,87 @@ public:
 		Head->pPrev = nullptr;
 	}
 
-	//                         Methods:
-	
-	void print()const {
-		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
+	void pop_back() {
+		if (Head == nullptr && Tail == nullptr)return;
+		if (Head == Tail)
 		{
-			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
+			delete Head;
+			Head = Tail = nullptr;
+			return;
 		}
-		cout << "Колличество элементов списка: " << this->size << endl;
-		cout << "Общее колличество элементов списка: " << Element::count << endl;
+		Tail = Tail->pPrev;
+		delete Tail->pNext;
+		Tail->pNext = nullptr;
 	}
 
-	void reverse_print()const {
-		for (Element* Temp = Tail; Temp; Temp = Temp->pPrev) {
-			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
+	void erase(int Index) {
+		if (Index == 0)return pop_front();
+		Element* Temp = Head;
+		for (int i = 0; i < Index - 1; i++)
+		{
+			if (Temp->pNext == nullptr)return pop_back();
+			Temp = Temp->pNext;
 		}
+		Element* Erased = Temp->pNext;
+		Temp->pNext = Temp->pNext->pNext;
+		delete Erased;
+		size--;
+	}
+	
+
+
+
+	//						Methods:
+	void print()const
+	{
+		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
+			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
+		cout << "Количество элементов списка: " << size << endl;
+	}
+	void reverse_print()const
+	{
+		for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
+			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
+		cout << "Количество элементов списка: " << size << endl;
 	}
 };
 
-void main() {
+#define BASE_CHECK
+//#define INSERT_CHECK
+#define ERASE_CHECK
+
+void main()
+{
 	setlocale(LC_ALL, "");
 
+#ifdef BASE_CHECK
 	int n;
-	cout << "Enter list size: "; cin >> n;
+	cout << "Введите размер списка: "; cin >> n;
 	List list;
 	for (int i = 0; i < n; i++)
 	{
+		//list.push_front(rand() % 100);
 		list.push_back(rand() % 100);
-
 	}
 	list.print();
-	list.reverse_print();
+	//list.reverse_print();
+    //list.pop_back();
+#endif // BASE_CHECK
+
+#ifdef INSERT_CHECK
+	int Data, Index;
+	cout << "Enter element for add: "; cin >> Data;
+	cout << "Enter index for add: "; cin >> Index;
+	list.insert(Data, Index);
+	list.print();
+#endif // INSERT_CHECK
+
+#ifdef ERASE_CHECK
+	int Index;
+	cout << "Enter index for delete: "; cin >> Index;
+	list.erase(Index);
+	list.print();
+#endif // ERASE_CHECK
+
 
 }
