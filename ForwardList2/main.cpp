@@ -118,6 +118,8 @@ public:
 		Tail = Tail->pPrev;
 		delete Tail->pNext;
 		Tail->pNext = nullptr;
+
+		size--;
 	}
 
 	void erase(int Index) {
@@ -144,8 +146,8 @@ public:
 };
 
 #define BASE_CHECK
-//#define INSERT_CHECK
-#define ERASE_CHECK
+#define INSERT_CHECK
+//#define ERASE_CHECK
 
 void main()
 {
